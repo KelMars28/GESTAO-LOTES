@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+<div style="padding: 20px; max-width: 800px; margin: auto;">
+    <div style="background: {% if lote.status_revisao == 'Abastecido' %}#2196F3{% elif lote.status_revisao == 'Revisado' %}#27ae60{% else %}#f39c12{% endif %}; 
+                padding: 20px; border-radius: 12px 12px 0 0; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0;"><i class="fas fa-file-alt"></i> Detalhe Lote: {{ lote.programa_doc }}</h2>
+        <div style="text-align: right;">
+            <small style="display: block; opacity: 0.8; font-weight: bold;">STATUS ATUAL</small>
+            <span style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; text-transform: uppercase; font-weight: bold;">
+                {{ lote.status_revisao }}
+            </span>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+            <div><label style="font-size: 0.7rem; font-weight: bold; color: #999;">PRODUTO</label><p>{{ lote.produto }}</p></div>
+            <div><label style="font-size: 0.7rem; font-weight: bold; color: #999;">COR</label><p>{{ lote.cor_n }}</p></div>
+            <div><label style="font-size: 0.7rem; font-weight: bold; color: #999;">DATA RETENÇÃO</label><p>{{ lote.data_geracao.strftime('%d/%m/%Y') }}</p></div>
+        </div>
+
+        <div style="border-top: 2px solid #f8f9fa; pt: 20px;">
+            <h4 style="color: #333; margin-bottom: 20px;"><i class="fas fa-check-circle"></i> Ações da Revisão</h4>
+            
+            {% if lote.status_revisao == 'Pendente' %}
+                <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px dashed #ffeeba; text-align: center;">
+                    <i class="fas fa-exclamation-triangle"></i> Lote pendente de revisão técnica no setor.
+                </div>
+            {% else %}
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <div>
+                        <label style="font-size: 0.7rem; font-weight: bold; color: #999;">DATA DA REVISÃO</label>
+                        <p style="font-weight: bold; color: #2c3e50;">{{ lote.data_revisao.strftime('%d/%m/%Y') if lote.data_revisao else '---' }}</p>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; font-weight: bold; color: #999;">QUEM REVISOU?</label>
+                        <p style="font-weight: bold; color: #2c3e50;">{{ lote.quem_revisou or '---' }}</p>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; font-weight: bold; color: #999;">QTD PROBLEMAS</label>
+                        <p style="font-weight: bold; color: #2c3e50;">{{ lote.qtd_problemas }}</p>
+                    </div>
+                </div>
+                
+                {% if lote.status_revisao == 'Abastecido' %}
+                <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; color: #0d47a1; border-radius: 5px; font-size: 0.9rem; text-align: center;">
+                    <i class="fas fa-truck-loading"></i> Este lote foi liberado via **Abastecimento Direto**.
+                </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="{{ url_for('relatorio') }}" style="display: inline-block; padding: 12px 25px; background: #27ae60; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <i class="fas fa-arrow-left"></i> VOLTAR
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

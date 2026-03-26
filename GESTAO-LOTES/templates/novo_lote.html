@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 30px auto; padding: 0 20px;">
+    <div style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+        
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid #f8f9fa; padding-bottom: 20px;">
+            <div style="background: var(--primary); color: white; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-edit fa-lg"></i>
+            </div>
+            <div>
+                <h2 style="margin:0; color: #2c3e50;">Registro de Retenção</h2>
+                <p style="margin:5px 0 0 0; color: #7f8c8d; font-size: 0.9rem;">Preencha os dados do lote para controle de qualidade.</p>
+            </div>
+        </div>
+
+        <form method="POST" onsubmit="document.getElementById('btn-salvar').disabled = true; document.getElementById('btn-salvar').innerHTML = 'Salvando...';" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+            
+            <div>
+                <label style="font-weight: bold; color: #444;">Data:</label>
+                <input type="date" name="data" value="{{ data_hoje }}" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #444;">Turno:</label>
+                <select name="turno" style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px; background: #f9f9f9;">
+                    <option value="1º Turno" {% if turno == '1º Turno' %}selected{% endif %}>1º Turno (06:00 - 14:48)</option>
+                    <option value="2º Turno" {% if turno == '2º Turno' %}selected{% endif %}>2º Turno (14:50 - 23:40)</option>
+                    <option value="3º Turno" {% if turno == '3º Turno' %}selected{% endif %}>3º Turno (23:24 - 06:00)</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #444;">Programa / DOC:</label>
+                <input type="text" name="programa_doc" placeholder="Ex: 857274/1" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #444;">Nº do Calçado:</label>
+                <input type="text" name="numero" placeholder="Ex: 0334" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #444;">Código do Produto:</label>
+                <input type="text" name="produto" maxlength="7" placeholder="Ex: 1234567" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px;">
+            </div>
+
+            <div>
+                <label style="font-weight: bold; color: #444;">Código da Cor:</label>
+                <input type="text" name="cor" placeholder="Ex: 20766 ou CA487" required style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px;">
+            </div>
+
+            <div style="grid-column: span 2;">
+                <label style="font-weight: bold; color: #444;">Motivo da Retenção:</label>
+                <textarea name="motivo" rows="3" 
+                    placeholder="Ex: Estrias / Bolhas / Tonalidade" 
+                    required 
+                    style="width:100%; padding:12px; border:1px solid #ddd; border-radius: 8px; margin-top: 8px; font-family: inherit; resize: none; text-transform: uppercase;"></textarea>
+            </div>
+
+            <div style="grid-column: span 2; display: flex; gap: 15px; margin-top: 10px;">
+                <button type="submit" id="btn-salvar" style="flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                    <i class="fas fa-save"></i> SALVAR RETENÇÃO
+                </button>
+                
+                <a href="{{ url_for('dashboard_interno') }}" style="flex: 1; text-align: center; padding: 15px; background: #eee; color: #555; text-decoration: none; border-radius: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+                    CANCELAR
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

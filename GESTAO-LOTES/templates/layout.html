@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Lotes - EXPF7</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+   <nav class="navbar">
+        <div class="navbar-fluid">
+            <a class="logo" href="{{ url_for('index') }}" style="display: flex; align-items: center; gap: 10px;">
+                <img src="{{ url_for('static', filename='img/logo_sgq.png') }}" 
+                    alt="Logo SGQ" 
+                    style="height: 35px; width: auto; background: white; border-radius: 4px; padding: 2px;"
+                    onerror="this.style.display='none'"> <span style="display: flex; align-items: baseline; gap: 5px;">
+                    GESTÃO DE LOTES RETIDOS <small style="font-size: 0.7rem; opacity: 0.8;">| EXPF7</small>
+                </span>
+            </a>
+            <div class="menu">
+                <a href="#" class="btn-nav"><i class="fas fa-question-circle"></i> Ajuda</a>
+
+                {% if session.get('logged_in') %}
+                    <span style="color: white; margin-left: 15px; font-weight: 500; font-size: 0.9rem;">
+                        <i class="fas fa-user-circle"></i> Olá, {{ session.get('usuario_nome', 'Usuário') }}
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="btn-entrar-top" style="background: #e74c3c; border-color: #c0392b; margin-left: 10px;">
+                        <i class="fas fa-sign-out-alt"></i> SAIR
+                    </a>
+                
+                {% elif request.endpoint != 'login' %}
+                    <a href="{{ url_for('login') }}" class="btn-entrar-top">
+                        <i class="fas fa-sign-in-alt"></i> ENTRAR
+                    </a>
+                {% endif %}
+            </div>
+    </nav>
+
+   <div class="content">
+        {% block content %}{% endblock %}
+   </div>
+</body>
+</html>

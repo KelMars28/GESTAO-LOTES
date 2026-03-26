@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+    <div style="background: white; padding: 45px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center;">
+        
+        <img src="{{ url_for('static', filename='img/logo_sgq.png') }}" alt="Logo SGQ" style="height: 70px; margin-bottom: 25px;">
+        
+        <h2 style="color: #2c3e50; margin-bottom: 30px; font-weight: 600;">Área Restrita</h2>
+
+        {% if erro %}
+            <p style="color: var(--danger); background: #fee2e2; padding: 10px; border-radius: 8px; font-size: 0.85rem;">{{ erro }}</p>
+        {% endif %}
+
+        <form method="POST" style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="text-align: left;">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #555; margin-left: 5px;">Usuário</label>
+                <input type="text" name="username" placeholder="Seu nome de usuário" required 
+                       style="width: 100%; padding: 14px; border: 1px solid #e1e4e8; border-radius: 10px; margin-top: 8px; font-size: 1rem; outline: none; transition: 0.3s; border-color: var(--primary);">
+            </div>
+
+            <div style="text-align: left;">
+                <label style="font-weight: bold; font-size: 0.85rem; color: #555; margin-left: 5px;">Senha</label>
+                <input type="password" name="password" placeholder="••••••••" required 
+                       style="width: 100%; padding: 14px; border: 1px solid #e1e4e8; border-radius: 10px; margin-top: 8px; font-size: 1rem; outline: none; transition: 0.3s;">
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1rem; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(133, 152, 238, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px;">
+                <i class="fas fa-unlock-alt"></i> ACESSAR SISTEMA
+            </button>
+        </form>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f1f1f1;">
+            <a href="{{ url_for('index') }}" style="text-decoration:none; color: #7f8c8d; font-size: 0.8rem;">
+                <i class="fas fa-arrow-left"></i> Voltar para dashboard
+            </a>
+           <a class="logo" href="{{ url_for('index') }}" style="display: flex; align-items: center; gap: 10px;">
+                <img src="{{ url_for('static', filename='img/logo_sgq.png') }}" alt="Logo SGQ" style="height: 35px; width: auto; background: white; border-radius: 4px; padding: 2px;">
+                
+                <span style="display: flex; align-items: baseline; gap: 5px;">
+                    GESTÃO DE LOTES RETIDOS <small style="font-size: 0.7rem; opacity: 0.8;">| EXPF7</small>
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

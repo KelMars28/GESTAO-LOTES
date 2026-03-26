@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+        
+        <a href="{{ url_for('novo_lote') }}" class="chart-card" style="text-decoration: none; border-bottom: 4px solid var(--primary); cursor: pointer;">
+            <i class="fas fa-plus-circle" style="font-size: 2rem; color: var(--primary); margin-bottom: 10px;"></i>
+            <h3 style="color: var(--text);">NOVO LOTE RETIDO</h3>
+            <small>Cadastrar nova retenção</small>
+        </a>
+
+        <a href="{{ url_for('concluir_revisao_busca') }}" class="chart-card" style="text-decoration: none; border-bottom: 4px solid var(--success); cursor: pointer;">
+            <i class="fas fa-check-double" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
+            <h3 style="color: var(--text);">CONCLUIR REVISÃO</h3>
+            <small>Liberar lotes revisados</small>
+        </a>
+
+        <a href="{{ url_for('relatorio') }}" class="chart-card" style="text-decoration: none; border-bottom: 4px solid #34495e; cursor: pointer;">
+            <i class="fas fa-file-alt" style="font-size: 2rem; color: #34495e; margin-bottom: 10px;"></i>
+            <h3 style="color: var(--text);">RELATÓRIOS</h3>
+            <small>Histórico e indicadores</small>
+        </a>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #ddd; margin-bottom: 30px;">
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>NO PRAZO</h3>
+            <p style="color: var(--success);">{{ stats.no_prazo }}</p>
+            <small>Lotes retidos no prazo</small>
+        </div>
+
+        <div class="chart-card">
+            <h3>FORA DO PRAZO</h3>
+            <p style="color: var(--danger);">{{ stats.fora_prazo }}</p>
+            <small>Lotes acima de 24h</small>
+        </div>
+
+        <div class="chart-card" style="grid-column: span 2;">
+            <h3>TOTAL AGUARDANDO REVISÃO</h3>
+            <p style="color: var(--warning);">{{ stats.aguardando }}</p>
+            <small>Pendências totais no setor</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

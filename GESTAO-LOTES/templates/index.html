@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div>
+                    <h2 style="margin:0; color: #2c3e50;">Monitoramento de Lotes RETIDOS</h2>
+                    <p style="margin:2px 0 0 0; color: #7f8c8d; font-size: 0.9rem;">Painel de visualização geral | Unidade EXPF7</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="filter-group" style="background: #f1f2f6; padding: 5px; border-radius: 8px; display: flex; gap: 5px;">
+                    <button class="btn-filter active">Dia</button>
+                    <button class="btn-filter">Jan</button>
+                    <button class="btn-filter">2026</button>
+                </div>
+                <button onclick="window.location.reload()" class="btn-action" title="Sincronizar dados"><i class="fas fa-sync"></i></button>
+            </div>
+        </div>
+
+        <div class="charts-grid" style="margin-bottom: 30px;">
+            <div class="chart-card">
+                <h3>REVISADOS</h3>
+                <p style="color: var(--success);">{{ stats.perc_prazo }}%</p>
+                <small>Lotes conformes</small>
+            </div>
+
+            <div class="chart-card">
+                <h3>A DEVOLVER</h3>
+                <p style="color: var(--danger);">{{ (100 - stats.perc_prazo)|round(1) }}%</p>
+                <small>Lotes fora do prazo</small>
+            </div>
+
+            <div class="chart-card">
+                <h3>ABASTECIDOS</h3>
+                <p style="color: var(--primary);">{{ stats.revisados }}</p>
+                <small>Total revisado no sistema</small>
+            </div>
+
+            <div class="chart-card" style="border-bottom: 4px solid #f39c12;">
+                <h3>REVISÃO</h3>
+                <p style="color: #f39c12;">{{ stats.total - stats.revisados }}</p>
+                <small>Pendências no setor</small>
+            </div>
+        </div>
+
+        <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h3 style="margin-bottom: 20px; color: #34495e; font-size: 1.1rem;"><i class="fas fa-chart-bar"></i> Volume de Lotes por Categoria</h3>
+            <canvas id="graficoQuantidades" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('graficoQuantidades').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Revisados', 'A Devolver', 'Abastecidos', 'Pendentes'],
+            datasets: [{
+                label: 'Quantidade de Lotes',
+                data: [
+                    {{ stats.revisados }}, 
+                    {{ stats.atrasados }}, 
+                    {{ stats.no_prazo }}, 
+                    {{ stats.total - stats.revisados }}
+                ],
+                backgroundColor: ['#27ae60', '#d9534f', '#8598EE', '#f39c12'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: { y: { beginAtZero: true } },
+            plugins: { legend: { display: false } }
+        }
+    });
+</script>
+{% endblock %}

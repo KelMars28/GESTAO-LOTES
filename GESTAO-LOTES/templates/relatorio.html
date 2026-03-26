@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="background-color: #f4f7f6; min-height: 100vh; padding: 30px 20px;">
+    <div style="max-width: 1300px; margin: 0 auto;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
+            <div>
+                <h2 style="color: #2c3e50; font-weight: 700; margin: 0;">Relatório de Lotes Retidos</h2>
+                <p style="color: #7f8c8d; margin: 5px 0 0 0;">Gerenciamento e busca de retenções de solas</p>
+            </div>
+            <a href="{{ url_for('dashboard_interno') }}" style="text-decoration: none; color: #7d89f0; font-weight: 600; font-size: 0.8rem;">
+                <i class="fas fa-arrow-left"></i> Voltar ao Painel
+            </a>
+        </div>
+
+        <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; gap: 10px;">
+            <div style="flex: 3; position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 15px; top: 12px; color: #bdc3c7;"></i>
+                <input type="text" id="inputPesquisa" onkeyup="filtrarTabela()" placeholder="Pesquisar por Produto, Programa ou Nº Calçado..." 
+                       style="width: 100%; padding: 10px 10px 10px 40px; border: 1px solid #eee; border-radius: 8px; outline: none; font-size: 0.9rem;">
+            </div>
+            
+            <select id="filtroTurno" onchange="filtrarTabela()" style="flex: 1; padding: 10px; border: 1px solid #eee; border-radius: 8px; color: #636e72; outline: none;">
+                <option value="">Todos os Turnos</option>
+                <option value="1º Turno">1º Turno</option>
+                <option value="2º Turno">2º Turno</option>
+                <option value="3º Turno">3º Turno</option>
+            </select>
+
+            <select id="filtroStatus" onchange="filtrarTabela()" style="flex: 1; padding: 10px; border: 1px solid #eee; border-radius: 8px; color: #636e72; outline: none;">
+                <option value="">Todos os Status</option>
+                <option value="AGUARDANDO">Aguardando</option>
+                <option value="REVISADO">Revisado</option>
+                <option value="ABASTECIDO">Abastecido</option> </select>
+
+            <button onclick="window.location.reload()" style="background: #f8f9fa; border: 1px solid #eee; padding: 10px 20px; border-radius: 8px; color: #7d89f0; font-weight: bold; cursor: pointer;">
+                <i class="fas fa-eraser"></i> Limpar
+            </button>
+        </div>
+
+        <div style="background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden;">
+            <table id="tabelaLotes" style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #f1f1f1; text-align: left; background: #fafafa;">
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Data</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Turno</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Prog / DOC</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Produto / Cor</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Nº</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">Motivo</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem;">E-mail</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; text-align: center;">Status</th>
+                        <th style="padding: 20px; color: #b2bec3; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lote in lotes %}
+                    <tr style="border-bottom: 1px solid #f9f9f9;">
+                        <td style="padding: 20px; color: #2c3e50;">{{ lote.data_geracao.strftime('%d/%m/%Y') }}</td>
+                        <td style="padding: 20px; color: #636e72;">{{ lote.turno }}</td>
+                        <td style="padding: 20px; color: #2d3436;">{{ lote.programa_doc }}</td>
+                        <td style="padding: 20px;">
+                            <div style="font-weight: 700; color: #2d3436;">{{ lote.produto }}</div>
+                            <div style="font-size: 0.7rem; color: #b2bec3;">Cor: {{ lote.cor_n }}</div>
+                        </td>
+                        <td style="padding: 20px; font-weight: 700; color: #2d3436;">{{ lote.numero_calcado }}</td>
+                        <td style="padding: 20px;">
+                            <span style="color: #e74c3c; font-size: 0.75rem; font-weight: 700; background: #fff5f5; padding: 4px 10px; border-radius: 4px;">{{ lote.motivo_retencao }}</span>
+                        </td>
+                        <td style="padding: 20px;">
+                            {% if lote.quem_respondeu %}
+                                <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;">
+                                    <i class="fas fa-check"></i> SIM
+                                </span>
+                            {% else %}
+                                <span style="background: #ffebee; color: #c62828; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold;">
+                                    <i class="fas fa-times"></i> NÃO
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 20px; text-align: center;">
+                            {% if lote.status_revisao == 'Abastecido' %}
+                                <span style="background: #e3f2fd; color: #1976d2; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; border: 1px solid #bbdefb; display: inline-block; min-width: 100px;">
+                                    <i class="fas fa-truck-loading"></i> ABASTECIDO
+                                </span>
+                            {% elif lote.status_revisao == 'Pendente' %}
+                                <span style="background: #fff8e1; color: #f57c00; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; border: 1px solid #ffe082; display: inline-block; min-width: 100px;">
+                                    <i class="fas fa-clock"></i> AGUARDANDO
+                                </span>
+                            {% else %}
+                                <span style="background: #e8f5e9; color: #2e7d32; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; border: 1px solid #c8e6c9; display: inline-block; min-width: 100px;">
+                                    <i class="fas fa-check"></i> REVISADO
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td style="padding: 20px; text-align: center;">
+                            <div style="display: flex; gap: 15px; justify-content: center; align-items: center;">
+                                <a href="{{ url_for('detalhe_lote_pagina', id=lote.id) }}" style="text-decoration: none; color: #7d89f0; font-size: 0.8rem; font-weight: 700;">
+                                    <i class="far fa-eye"></i> Ver
+                                </a>
+                                <form action="{{ url_for('excluir_lote', id=lote.id) }}" method="POST" style="margin:0;">
+                                    <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este lote permanentemente?')" 
+                                            style="background: none; border: none; color: #ff7675; font-size: 0.8rem; font-weight: 700; cursor: pointer; padding: 0;">
+                                        <i class="fas fa-trash-alt"></i> Excluir
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function filtrarTabela() {
+    const termo = document.getElementById("inputPesquisa").value.toUpperCase();
+    const turno = document.getElementById("filtroTurno").value.toUpperCase();
+    const status = document.getElementById("filtroStatus").value.toUpperCase();
+    const linhas = document.querySelector("#tabelaLotes tbody").getElementsByTagName("tr");
+
+    for (let i = 0; i < linhas.length; i++) {
+        const colunas = linhas[i].getElementsByTagName("td");
+        const textoLinha = linhas[i].innerText.toUpperCase();
+        const textoTurno = colunas[1].innerText.toUpperCase();
+        const textoStatus = colunas[7].innerText.toUpperCase(); 
+
+        const matchTermo = textoLinha.includes(termo);
+        const matchTurno = turno === "" || textoTurno.includes(turno);
+        const matchStatus = status === "" || textoStatus.includes(status);
+
+        linhas[i].style.display = (matchTermo && matchTurno && matchStatus) ? "" : "none";
+    }
+}
+</script>
+{% endblock %}

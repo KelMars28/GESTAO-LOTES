@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-card" style="max-width: 500px;">
+        <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-envelope-open-text"></i> Retorno do Supervisor
+        </h2>
+
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--primary);">
+            <p><strong>Produto:</strong> {{ lote.produto }}</p>
+            <p><strong>Programa/DOC:</strong> {{ lote.programa_doc }}</p>
+            <p><strong>Motivo:</strong> {{ lote.motivo_retencao }}</p>
+        </div>
+
+        <form action="{{ url_for('confirmar_email', id=lote.id) }}" method="POST">
+            <label><strong>Quem está respondendo?</strong></label>
+            <input type="text" name="supervisor" placeholder="Seu nome completo" required>
+
+            <div style="background: #fff3cd; padding: 10px; border-radius: 5px; color: #856404; font-size: 0.9rem; margin-bottom: 15px;">
+                <i class="fas fa-exclamation-triangle"></i> Ao confirmar, você declara que o e-mail de alerta já foi respondido com as devidas ações.
+            </div>
+
+            <div class="form-footer-actions">
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-check"></i> CONFIRMAR RESPOSTA DE E-MAIL
+                </button>
+                <a href="{{ url_for('relatorio') }}" class="btn-secondary" style="margin-top: 15px;">Voltar ao Relatório</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
