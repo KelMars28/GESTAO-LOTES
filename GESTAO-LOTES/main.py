@@ -10,6 +10,8 @@ app.secret_key = 'lotes_expf7_secret'
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Criando a variável db obrigatória
 db = SQLAlchemy(app)
 
 class Lote(db.Model):
@@ -141,8 +143,6 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
-from datetime import datetime
-
 # Rota para abrir a página de busca de revisão
 @app.route('/concluir_revisao')
 def concluir_revisao_busca():
@@ -183,4 +183,4 @@ def finalizar_revisao_db(id):
     return redirect(url_for('relatorio'))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True, port=5002)
